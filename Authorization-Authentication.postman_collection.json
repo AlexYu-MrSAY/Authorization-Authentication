@@ -1,0 +1,373 @@
+{
+	"info": {
+		"_postman_id": "a96a64c2-27c2-435f-82f8-cf0ea28df878",
+		"name": "Authorization-Authentication",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST",
+			"item": [
+				{
+					"name": "Post Game",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "654321",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "yugai13912@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\" : 2,\r\n    \"title\" : \"CS:GO\",\r\n    \"description\" : \"Shooter\",\r\n    \"price\" : 10\r\n}"
+						},
+						"url": {
+							"raw": "localhost:7000/games",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\" : 2,\r\n    \"first_name\" : \"Alexandr\",\r\n    \"last_name\" : \"Yugay\",\r\n    \"login\" : \"yugai13912@mail.ru\",\r\n    \"password\" : \"654321\",\r\n    \"birthday\" : \"11-07-2002\",\r\n    \"role\" : \"admin\"\r\n}"
+						},
+						"url": {
+							"raw": "localhost:7000/users",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GET",
+			"item": [
+				{
+					"name": "Get by One (Library)",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "a.keninbayev@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:7000/owngames/2",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"owngames",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By One (User)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:7000/users/2",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"users",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By One (Game)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:7000/games/1",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"games",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All (Library)",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "a.keninbayev@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:7000/owngames",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"owngames"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All (User)",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "654321",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "yugai13912@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:7000/users",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All (Game)",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "654321",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "yugai13912@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:7000/games",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"games"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DELETE",
+			"item": [
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:7000/users/2",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"users",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Game",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:7000/games/2",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"games",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PATCH",
+			"item": [
+				{
+					"name": "Patch Game",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "654321",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "yugai13912@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\" : 1,\r\n    \"title\" : \"Half-Life\",\r\n    \"description\" : \"Action\",\r\n    \"price\" : 15\r\n}"
+						},
+						"url": {
+							"raw": "localhost:7000/games/1",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"games",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch User",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "a.keninbayev@mail.ru",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\" : 1,\r\n    \"first_name\" : \"Alexandr\",\r\n    \"last_name\" : \"Yugay\",\r\n    \"login\" : \"a.keninbayev@mail.ru\",\r\n    \"password\" : \"123456\",\r\n    \"birthday\" : \"13-06-2002\",\r\n    \"role\" : \"admin\"\r\n}"
+						},
+						"url": {
+							"raw": "localhost:7000/users/1",
+							"host": [
+								"localhost"
+							],
+							"port": "7000",
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
