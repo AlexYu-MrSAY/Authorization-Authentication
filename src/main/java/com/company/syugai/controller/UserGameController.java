@@ -3,6 +3,7 @@ package com.company.syugai.controller;
 import com.company.syugai.model.Game;
 import com.company.syugai.model.User;
 import com.company.syugai.model.UserGame;
+import com.company.syugai.model.UserRole;
 import com.company.syugai.service.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.j256.ormlite.dao.Dao;
@@ -32,15 +33,12 @@ public class UserGameController extends AbstractController<UserGame>{
         try{
             String password = context.basicAuthCredentials().getPassword();
             String username = context.basicAuthCredentials().getUsername();
-            List<User> users = userDao.queryForAll();
             List<Game> games = new ArrayList<>();
-            for(int i = 0; i < users.size(); i++){
-                User user  = users.get(i);
-                if(BCrypt.checkpw(password,user.getPassword()) && user.getLogin().equals(username)){
-                    List<UserGame> gamesId = libraryDao.queryBuilder().where().eq("User_Id", user.getId()).query();
-                    for(int j = 0; j < gamesId.size(); j++){
-                        games.add(gamesId.get(j).getGame());
-                    }
+            User user = userDao.queryBuilder().where().eq(User.LOGIN, username).queryForFirst();
+            if(BCrypt.checkpw(password,user.getPassword())){
+                List<UserGame> gamesId = libraryDao.queryBuilder().where().eq("User_Id", user.getId()).query();
+                for(int j = 0; j < gamesId.size(); j++){
+                    games.add(gamesId.get(j).getGame());
                 }
             }
             context.result(getObjectMapper().writeValueAsString(games));
@@ -52,27 +50,26 @@ public class UserGameController extends AbstractController<UserGame>{
 
     @Override
     public void getOne(Context context, int id) {
-        try{
+        try {
             String password = context.basicAuthCredentials().getPassword();
             String username = context.basicAuthCredentials().getUsername();
-            List<User> users = userDao.queryForAll();
             Game game = null;
-            for(int i = 0; i < users.size(); i++){
-                User user  = users.get(i);
-                if(BCrypt.checkpw(password, user.getPassword()) && user.getLogin().equals(username)){
-                    List<UserGame> libraries = libraryDao.queryForAll();
-                    game = findTheGame(user, libraries, id);
-                }
-
+            List<UserGame> libraries = libraryDao.queryForAll();
+            User user = userDao.queryBuilder().where().eq(User.LOGIN, username).queryForFirst();
+            if (BCrypt.checkpw(password, user.getPassword()) && user.getLogin().equals(username)) {
+                game = findTheGame(user, libraries, id);
+            } else if (user.getRole() == UserRole.ADMIN) {
+                game = findTheGame(user, libraries, id);
             }
-            if(game != null){
+            if (game != null) {
                 context.result(getObjectMapper().writeValueAsString(game));
-            } else{
+            } else {
                 context.status(403).result("Unauthorized");
             }
-        }catch (Exception e){
-            e.printStackTrace();
-            context.status(500);
+        }
+        catch(Exception e){
+                e.printStackTrace();
+                context.status(500);
         }
     }
 
@@ -89,11 +86,19 @@ public class UserGameController extends AbstractController<UserGame>{
     @Override
     public void post(Context context) {
         try {
+            String username = context.basicAuthCredentials().getUsername();
+            String password = context.basicAuthCredentials().getPassword();
             UserGame library = getObjectMapper().readValue(context.body(), getClazz());
-            getService().save(library);
-            UserGame saved = getService().findById(library.getId());
-            context.result(getObjectMapper().writeValueAsString(saved));
-            context.status(201);
+            int id = context.pathParam("User_id", Integer.class).get();
+            User user = userDao.queryBuilder().where().eq(User.LOGIN, username).queryForFirst();
+            if((BCrypt.checkpw(password, user.getPassword()) && user.getId() == id) || (user.getRole() == UserRole.ADMIN)) {
+                getService().save(library);
+                UserGame saved = getService().findById(library.getId());
+                context.result(getObjectMapper().writeValueAsString(saved));
+                context.status(201);
+            } else{
+                context.status(403).result("Unauthorized");
+            }
         }catch (Exception e){
             e.printStackTrace();
             context.status(500);

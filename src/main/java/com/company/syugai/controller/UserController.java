@@ -9,7 +9,6 @@ import com.j256.ormlite.dao.Dao;
 import io.javalin.http.Context;
 import org.mindrot.jbcrypt.BCrypt;
 
-import java.awt.image.BandCombineOp;
 import java.sql.SQLException;
 import java.util.List;
 
