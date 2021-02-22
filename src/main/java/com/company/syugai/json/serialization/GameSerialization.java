@@ -1,7 +1,6 @@
 package com.company.syugai.json.serialization;
 
 import com.company.syugai.model.Game;
-import com.company.syugai.model.User;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
