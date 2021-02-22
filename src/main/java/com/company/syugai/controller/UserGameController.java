@@ -59,7 +59,7 @@ public class UserGameController extends AbstractController<UserGame>{
             if (BCrypt.checkpw(password, user.getPassword()) && user.getLogin().equals(username)) {
                 game = findTheGame(user, libraries, id);
             } else if (user.getRole() == UserRole.ADMIN) {
-                game = findTheGame(user, libraries, id);
+                game = gameDao.queryForId(id);
             }
             if (game != null) {
                 context.result(getObjectMapper().writeValueAsString(game));
