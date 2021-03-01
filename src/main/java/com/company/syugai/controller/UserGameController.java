@@ -54,12 +54,10 @@ public class UserGameController extends AbstractController<UserGame>{
             String password = context.basicAuthCredentials().getPassword();
             String username = context.basicAuthCredentials().getUsername();
             Game game = null;
-            List<UserGame> libraries = libraryDao.queryForAll();
             User user = userDao.queryBuilder().where().eq(User.LOGIN, username).queryForFirst();
-            if (BCrypt.checkpw(password, user.getPassword()) && user.getLogin().equals(username)) {
-                game = findTheGame(user, libraries, id);
-            } else if (user.getRole() == UserRole.ADMIN) {
-                game = gameDao.queryForId(id);
+            if(BCrypt.checkpw(password, user.getPassword()) || user.getRole() == UserRole.ADMIN) {
+                UserGame library = libraryDao.queryBuilder().where().eq(UserGame.USER_ID, user.getId()).and().eq(UserGame.GAME_ID, id).queryForFirst();
+                game = library.getGame();
             }
             if (game != null) {
                 context.result(getObjectMapper().writeValueAsString(game));
@@ -71,16 +69,6 @@ public class UserGameController extends AbstractController<UserGame>{
                 e.printStackTrace();
                 context.status(500);
         }
-    }
-
-    public Game findTheGame(User user, List<UserGame> libraries, int gameId){
-        Game game = null;
-        for(int j = 0; j < libraries.size(); j++){
-            if(user.getId() == libraries.get(j).getUser().getId() && gameId == libraries.get(j).getGame().getId()){
-                game = libraries.get(j).getGame();
-            }
-        }
-        return game;
     }
 
     @Override
