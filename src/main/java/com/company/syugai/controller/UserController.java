@@ -10,7 +10,6 @@ import io.javalin.http.Context;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.SQLException;
-import java.util.List;
 
 public class UserController extends AbstractController<User>{
     private Dao<User, Integer> userDao;
@@ -24,12 +23,12 @@ public class UserController extends AbstractController<User>{
         try{
             String username = context.basicAuthCredentials().getUsername();
             String password = context.basicAuthCredentials().getPassword();
-            List<User> users = userDao.queryForAll();
-            if(validUser(username, password, users, id)) {
+            User user = userDao.queryBuilder().where().eq(User.LOGIN, username).queryForFirst();
+            if((BCrypt.checkpw(password, user.getPassword()) && user.getId() == id) || (BCrypt.checkpw(password, user.getPassword()) && user.getRole() == UserRole.ADMIN)) {
                 User model = getObjectMapper().readValue(context.body(), getClazz());
-                model.setId(id);
                 UserRole role = model.getRole();
                 getService().update(model);
+                model.setId(id);
                 model.setRole(role);
                 context.status(200);
             } else{
@@ -39,17 +38,5 @@ public class UserController extends AbstractController<User>{
             e.printStackTrace();
             context.status(400);
         }
-    }
-
-    public boolean validUser(String username, String password,List<User> users, int id){
-        boolean valid = false;
-        for(int i = 0; i < users.size(); i++){
-            if(users.get(i).getId() == id && users.get(i).getLogin().equals(username) && BCrypt.checkpw(password, users.get(i).getPassword())){
-                valid = true;
-            } else if(users.get(i).getRole() == UserRole.ADMIN && users.get(i).getLogin().equals(username) && BCrypt.checkpw(password, users.get(i).getPassword())){
-                valid = true;
-            }
-        }
-        return valid;
     }
 }
